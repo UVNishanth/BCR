@@ -4,8 +4,11 @@ def generate_keys():
     return rsa.newkeys(512)
 
 def encrypt(plaintext, pub_key):
-    p = plaintext.encode('utf8')
-    return rsa.encrypt(p, pub_key)
+    temp = ""
+    for p in plaintext:
+        temp += str(ord(p))
+    temp = int(temp)
+    return pow(temp, )
 
 def decrypt(c, priv_key):
     return rsa.decrypt(c, priv_key).decode('utf8')
