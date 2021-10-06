@@ -102,11 +102,10 @@ def findScore(counts):
         score += abs(freqs[letter] - counts[letter])
     return score
 
+message = "573IEJ169J65HJHI8H95412J0F434J93E7I4F9E9I9E9F545177142J"
 
-#message = "Meet me at serpentine tonight with the requested package"
-# message = "The quick brown fox jumps over the lazy dog"
+#message = "240EAF836F32DFDE5D62189F7B101F60A4E1B6A6E6A6B212844819F"
 
-message ="573IEJ169J65HJHI8H95412J0F434J93E7I4F9E9I9E9F545177142J"
 key = 2203
 ciphertext = encryptCaesar(message, key)
 
