@@ -1,3 +1,5 @@
+import time
+
 import ContinuedFractions, Arithmetic, RSAvulnerableKeyGenerator
 import rsa
 
@@ -28,10 +30,14 @@ print("Testing Wiener Attack")
 times = 1
 
 e,n,d,p,q = RSAvulnerableKeyGenerator.generateKeys(1024)
-print("(e,n) is (", e, ", ", n, ")")
-print("d = ", d)
+#print("(e,n) is (", e, ", ", n, ")")
+#print("d = ", d)
 
+start = time.time()
 hacked_d = hack_RSA(e, n)
+end = time.time()
+print("Time taken to hack: ", (end-start))
+
 
 plaintext = "abcdefgh".encode('utf-8')
 

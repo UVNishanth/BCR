@@ -35,7 +35,7 @@ class Oracle:
         ans = self.cipher.decrypt(ciphertext)
         hex_val = self.byte_to_hex(ans).decode()
         fin = bytearray.fromhex(hex_val).decode()
-        prefix_slice = fin[40:]
+        prefix_slice = fin[39:]
         return prefix_slice[:-self.padding]
 
 
@@ -43,7 +43,7 @@ class Oracle:
     #	display everything oracle knows if display = True
     # -------------------------------
     def oracle(self, target='a' * 27, display = False, see_oracle = False, timing = False):
-        message = self.getPadding("data=" + target + ",tooken=" + self.token)
+        message = self.getPadding("data=" + target + ",token=" + self.token)
         message_encoded = message.encode()
         encrypted = self.encrypt(message_encoded)
         if display:

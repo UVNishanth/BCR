@@ -110,7 +110,6 @@ class Attack:
             print(known, c)
             # ch = c.to_bytes(1, 'big')
             curr = known[1:] + c
-            print(known, c)
             encrypted = self.oracle.oracle(curr, disp, see_oracle, timing)
             second_block = encrypted[16:upper]
             D[second_block] = c

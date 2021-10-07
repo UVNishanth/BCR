@@ -16,10 +16,13 @@ ciphertext = oracle.initiate_encryption()
 p = oracle.decrypt(ciphertext)
 
 attack = Attack(oracle)
+start = time.time()
 plaintext = attack.start_attack_and_get_plaintext()
+end = time.time()
 print("p type: ", type(p))
 print("Ciphertext: ", oracle.byte_to_hex(ciphertext), " \nplaintext: ", plaintext)
 print("Decryption via decrypt: ", p)
+print("Time taken for attack: ", (end-start))
 
 
 
