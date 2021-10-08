@@ -14,8 +14,8 @@ class RSA:
         self.pub_key = rsa.PublicKey(self.n, self.e)
 
     def encrypt(self, message):
-        enc = message
-        #return rsa.encrypt(message, self.pub_key)
+        #enc = message
+        return rsa.encrypt(message, self.pub_key)
 
     def decrypt(self, ciphertext, priv_key):
         return rsa.decrypt(ciphertext, priv_key)
@@ -53,26 +53,50 @@ class RSA:
                         return d
 
 
-plaintext = "12345".encode('utf-8')
+
+
+plaintext = b'abceffg'
+
+#plaintext = "12345".encode('utf-8')
 rsa_mod = RSA()
 rsa_mod.generate_keys()
 priv_key = rsa_mod.get_private_key(rsa_mod.get_actual_d())
 c_text = rsa_mod.encrypt(plaintext)
-#c_text = c_text.decode('utf-8')
+print(type(c_text))
+
+c_text_hex = c_text.hex()
 print("ciphertext: ", c_text)
-p_text = rsa_mod.decrypt(c_text, priv_key)
+print("ciphertext after hex: ", c_text_hex)
+
+#p_text = rsa_mod.decrypt(c_text, priv_key)"""
 hacked_d = rsa_mod.hack_RSA()
 hacked_priv_key = rsa_mod.get_private_key(hacked_d)
 hacked_ptext = rsa_mod.decrypt(c_text, hacked_priv_key)
 
-print("ACtual plaintext: ",p_text, " derived plaintext is: ", hacked_ptext)
+print("Actual plaintext: ", plaintext, " derived plaintext is: ", hacked_ptext)
 
 caesar = Caesar()
-c_text_caesar = caesar.encryptCaesar(str(c_text), 2203)
+c_text_caesar = caesar.encryptCaesar(c_text_hex, 2203)
 print("cipher after caesar: ", c_text_caesar)
 
-caesar_p = caesar.decryptCaesar(str(c_text_caesar), 2203)
-rsa_p = rsa_mod.decrypt(str(caesar_p).encode('utf-8'), priv_key)
+caesar_p = caesar.decryptCaesar(c_text_caesar, 2203)
+possible = caesar.frequencyAttack(c_text_caesar)
+print("decrypted_Caesar: ", caesar_p)
+print("possible: ", possible)
+x = bytes.fromhex(caesar_p)
+rsa_p = rsa_mod.decrypt(x, priv_key)
 print("rsa_p", rsa_p)
+#print("possible: ", possible)
+
+
+# print("plain after caesar: ", caesar_p)
+
+"""for element in possible:
+    try:
+        x = bytes.fromhex(element)
+        rsa_p = rsa_mod.decrypt(x, priv_key)
+        print("rsa_p", rsa_p)
+    except(Exception):
+        print("Not a hex")"""
 
 
