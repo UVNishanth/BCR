@@ -2,13 +2,13 @@
          'e': 0.12702, 'r': 0.05987, 'f': 0.02228, 's': 0.06327, 'g': 0.02015, 't': 0.09056, 'h': 0.06094, 'u': 0.02758,
          'i': 0.06966, 'v': 0.00978, 'j': 0.00153, 'w': 0.0236, 'k': 0.00772, 'x': 0.0015, 'l': 0.04025, 'y': 0.01974,
          'm': 0.02406, 'z': 0.00074}"""
-freqs = {'A': 0.08167, 'N': 0.06749, 'B': 0.01492, 'O': 0.07507, 'C': 0.02782, 'P': 0.01929, 'D': 0.04253, 'Q': 0.00095,
-         'E': 0.12702, 'R': 0.05987, 'F': 0.02228, 'S': 0.06327, 'G': 0.02015, 'T': 0.09056, 'H': 0.06094, 'U': 0.02758,
-         'I': 0.06966, 'V': 0.00978, 'J': 0.00153, 'W': 0.0236, 'K': 0.00772, 'X': 0.0015, 'L': 0.04025, 'Y': 0.01974,
-         'M': 0.02406, 'Z': 0.00074}
 
-
-class caesar:
+class Caesar:
+    def __init__(self):
+        self.freqs = {'A': 0.08167, 'N': 0.06749, 'B': 0.01492, 'O': 0.07507, 'C': 0.02782, 'P': 0.01929, 'D': 0.04253, 'Q': 0.00095,
+                             'E': 0.12702, 'R': 0.05987, 'F': 0.02228, 'S': 0.06327, 'G': 0.02015, 'T': 0.09056, 'H': 0.06094, 'U': 0.02758,
+                             'I': 0.06966, 'V': 0.00978, 'J': 0.00153, 'W': 0.0236, 'K': 0.00772, 'X': 0.0015, 'L': 0.04025, 'Y': 0.01974,
+                             'M': 0.02406, 'Z': 0.00074}
 
     def encryptCaesar(self, text, key):
         a_key = int(key / 100)
@@ -65,7 +65,7 @@ class caesar:
 
         return counts
 
-    def frequencyAttack(self):
+    def frequencyAttack(self, ciphertext):
         minScore = 10000
         possibleKey = 0
         allScores = {}
@@ -98,18 +98,5 @@ class caesar:
             letter = chr(i + ord('A'))
             if letter not in counts:
                 counts[letter] = 0.0
-            score += abs(freqs[letter] - counts[letter])
+            score += abs(self.freqs[letter] - counts[letter])
         return score
-
-
-
-
-message = "573IEJ169J65HJHI8H95412J0F434J93E7I4F9E9I9E9F545177142J"
-
-#message = "240EAF836F32DFDE5D62189F7B101F60A4E1B6A6E6A6B212844819F"
-key = 2203
-c = caesar()
-ciphertext = c.encryptCaesar(message, key)
-
-print("Given cipher text : " + ciphertext)
-c.frequencyAttack()
