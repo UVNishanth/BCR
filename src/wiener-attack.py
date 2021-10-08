@@ -3,7 +3,7 @@ import time
 
 import ContinuedFractions, Arithmetic, RSAvulnerableKeyGenerator
 import rsa
-from Caesar import Caesar
+from Caesar_Attack import Caesar
 
 class RSA:
 
@@ -80,7 +80,8 @@ c_text_caesar = caesar.encryptCaesar(c_text_hex, 2203)
 print("cipher after caesar: ", c_text_caesar)
 
 caesar_p = caesar.decryptCaesar(c_text_caesar, 2203)
-possible = caesar.frequencyAttack(c_text_caesar)
+#possible = caesar.frequencyAttack(c_text_caesar)
+possible = caesar.caesarAttack(c_text_caesar)
 print("decrypted_Caesar: ", caesar_p)
 print("possible: ", possible)
 x = bytes.fromhex(caesar_p)
@@ -91,12 +92,10 @@ print("rsa_p", rsa_p)
 
 # print("plain after caesar: ", caesar_p)
 
-"""for element in possible:
+for element in possible:
     try:
         x = bytes.fromhex(element)
         rsa_p = rsa_mod.decrypt(x, priv_key)
         print("rsa_p", rsa_p)
     except(Exception):
-        print("Not a hex")"""
-
-
+        print("Not a valid plain text")
