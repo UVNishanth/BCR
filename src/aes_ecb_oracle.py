@@ -1,5 +1,9 @@
 # aes_ecb_oracle.py
+import sys
 
+import crypto
+
+sys.modules['Crypto'] = crypto
 from Crypto.Cipher import AES
 import binascii
 import time
@@ -17,6 +21,9 @@ class Oracle:
         self.padding = 0
     #print("Key = ", key)
     # tooken or secret information (<= 16 chars)
+
+    def get_token(self):
+        return self.token
 
     def set_target_message(self, target):
         self.token = target
