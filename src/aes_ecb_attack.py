@@ -10,37 +10,12 @@ class Attack:
         self.oracle = oracle
 
     def start_attack_and_get_plaintext(self):
+        display = True
+        walkthru = True
+        seeOracle = True
+        timing =  False
 
-        # The following boolean variables describe how the
-        #	attack program will run/display
-        # ----------------------------------
-        # Display - if True will display intermediate steps
-        Display = True
-        # Walkthru - if True will pause at intermediate steps
-        #	and must hit enter to continue
-        Walkthru = True
-        # SeeOracle - if True will see all oracle information
-        #	if False, hides information that attacker would not
-        #	be able to see/easily deduce
-        SeeOracle = True
-        # Timing - if True will slow down computation time to see
-        #	intermediate steps more clearly and give more persepctive
-        #	of time it would really take
-        Timing =  False
-
-        # ----------------------------------
-        # For showcasing recommend: Display = True,
-        # 							Walkthru = True,
-        # 							SeeOracle = True/False,
-        # 							Timing = True
-        # ----------------------------------
-        # For testing recommend: 	Display = True/False,
-        # 							Walkthru = False,
-        # 							SeeOracle = True,
-        # 							Timing = False
-        # ----------------------------------
-
-        return self.attack(Display, Walkthru, SeeOracle,  Timing)
+        return self.attack(display, walkthru, seeOracle,  timing)
 
     # attack!
     # -------------------------------
@@ -56,9 +31,6 @@ class Attack:
 
         # If Walkthru, stop at each byte
         if walkthru:
-            # While keepgoing is False, keep going through walkthru
-            # 	if False, skip to end
-            keepgoing = True
             i = 0
             known_list = []
             # For each byte in the length of the max length of secret
@@ -71,11 +43,6 @@ class Attack:
                 else:
                     known = self.get_next_byte(a_list, known, upper, disp, walkthru, see_oracle, timing)
                 a_list = a_list[0:-1]
-
-                # if keepgoing:
-                #     if"skip" == input("Next round or 'skip' ? "):
-                #         keepgoing = False
-                #         disp = False
                 known_list += [known]
 
             # Print a summary of results

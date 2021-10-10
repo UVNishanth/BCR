@@ -1,7 +1,6 @@
 '''
-Created on Dec 14, 2011
 
-@author: pablocelayes
+Referred to https://github.com/pablocelayes/rsa-wiener-attack
 
 '''
 
@@ -18,7 +17,6 @@ def rational_to_contfrac(x,y):
         pquotients.append(a)
     return pquotients
 
-#TODO: efficient method that calculates convergents on-the-go, without doing partial quotients first
 def convergents_from_contfrac(frac):
     '''
     computes the list of convergents
@@ -40,24 +38,3 @@ def contfrac_to_rational (frac):
     for _ in range(-2,-len(frac)-1,-1):
         num, denom = frac[_]*num+denom, num
     return (num,denom)
-
-def test1():
-    '''
-    Verify that the basic continued-fraction manipulation stuff works.
-    '''
-    testnums = [(1, 1), (1, 2), (5, 15), (27, 73), (73, 27)]
-    for r in testnums:
-        (num, denom) = r
-        print('rational number:')
-        print(r)
-
-        contfrac = rational_to_contfrac (num, denom)
-        print('continued fraction:')
-        print(contfrac)
-
-        print('convergents:')
-        print(convergents_from_contfrac(contfrac))
-        print('***********************************')
-
-if __name__ == "__main__":
-    test1()

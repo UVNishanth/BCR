@@ -1,3 +1,9 @@
+'''
+
+Referred to https://github.com/pablocelayes/rsa-wiener-attack for the MillerRabin implementation
+
+'''
+
 import random, sys
 
 def miller_rabin_pass(a, s, d, n):
