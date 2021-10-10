@@ -71,13 +71,3 @@ class Caesar:
             arr.append(translated)
             #print('Hacking key #%s: %s' % (key, translated))
         return arr
-
-caesar = Caesar()
-
-c_text_caesar = caesar.encryptCaesar('01d0e9d8ba054c8e3837233017caf082c4bb0e1007f11f61bc618f52c1f13f21572c3aea2bc9f86950b0c121d81512be23645a3a12fc7c1e85d296de545861bb9d', 2203)
-caesar_p = caesar.decryptCaesar(c_text_caesar, 2203)
-print("decrypted_Caesar: ", caesar_p)
-
-possible = caesar.caesarAttack(c_text_caesar)
-
-print(possible)

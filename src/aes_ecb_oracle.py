@@ -57,7 +57,7 @@ class Oracle:
             if timing: time.sleep(.05)
             self.disp(message, target, encrypted, see_oracle)
         encrypted_decoded = self.byte_to_hex(encrypted)
-        print("Encrypted decoded", encrypted_decoded)
+        #print("Encrypted decoded", encrypted_decoded)
         return encrypted
 
 

@@ -1,87 +1,57 @@
-import binascii
 import time
 
-import ContinuedFractions, Arithmetic, RSAvulnerableKeyGenerator
-import rsa
+from BCR_rsa import RSA
 from Caesar_Attack import Caesar
 from aes_ecb_oracle import Oracle
 from aes_ecb_attack import Attack
-
-class RSA:
-
-    def __init__(self):
-        pass
-    def generate_keys(self):
-        self.e, self.n, self.d, self.p, self.q = RSAvulnerableKeyGenerator.generateKeys(1024)
-        self.pub_key = rsa.PublicKey(self.n, self.e)
-        print("Public key is: ", self.pub_key)
-
-    def encrypt(self, message):
-        #enc = message
-        return rsa.encrypt(message, self.pub_key)
-
-    def decrypt(self, ciphertext, priv_key):
-        return rsa.decrypt(ciphertext, priv_key)
-
-    def get_private_key(self, d):
-        return rsa.PrivateKey(self.n, self.e, d, self.p, self.q)
-
-    def get_actual_d(self):
-        return self.d
-
-
-    def hack_RSA(self):
-        '''
-        Finds d knowing (e,n)
-        applying the Wiener continued fraction attack
-        '''
-        e = self.e
-        n = self.n
-        frac = ContinuedFractions.rational_to_contfrac(e, n)
-        convergents = ContinuedFractions.convergents_from_contfrac(frac)
-
-        for (k, d) in convergents:
-
-            #check if d is actually the key
-            if k!=0 and (e*d-1)%k == 0:
-                phi = (e*d-1)//k
-                s = n - phi + 1
-                # check if the equation x^2 - s*x + n = 0
-                # has integer roots
-                discr = s*s - 4*n
-                if(discr>=0):
-                    t = Arithmetic.is_perfect_square(discr)
-                    if t!=-1 and (s+t)%2==0:
-                        print("Hacked!")
-                        return d
-
 
 
 def test_A(plaintext):
     # Encryption
     #RSA
-    plaintext = plaintext.encode('utf-8')
-
+    orig_plaintext = plaintext
+    print("plaintext is: ", orig_plaintext)
     rsa_mod = RSA()
     rsa_mod.generate_keys()
     priv_key = rsa_mod.get_private_key(rsa_mod.get_actual_d())
+    plaintext = plaintext.encode('utf-8')
     c_text1 = rsa_mod.encrypt(plaintext)
     c_text1 = c_text1.hex()
-    print("cipher after rsa: ", c_text1)
+    #print("cipher after rsa: ", c_text1)
 
     #Caesar
     caesar = Caesar()
-    c_text_caesar = caesar.encryptCaesar(c_text1, 2203)
-    print("cipher after caesar: ", c_text_caesar)
+    caesar_key = 2203
+    c_text_caesar = caesar.encryptCaesar(c_text1, caesar_key)
+    #print("cipher after caesar: ", c_text_caesar)
 
     #ECB
     oracle = Oracle()
     oracle.set_target_message(c_text_caesar)
     ciphertext = oracle.initiate_encryption()
-    ciphertext_hex = ciphertext.hex()
-    print("ECB cipher is: ", ciphertext_hex)
+    # ciphertext_hex = ciphertext.hex()
+    # print("ECB cipher is: ", ciphertext_hex)
+
+    input_ciphertext = ciphertext
+    print("Ciphertext after encrypting by BCR system: ", input_ciphertext.hex())
+
+    #Decryption
+    decrypt_time_s = time.time()
+    ecb_decrypted_text = oracle.decrypt(input_ciphertext)
+    caesar_decrypted_text = caesar.decryptCaesar(ecb_decrypted_text, caesar_key)
+    caesar_decrypted_text = bytes.fromhex(caesar_decrypted_text)
+    final_plaintext = rsa_mod.decrypt(caesar_decrypted_text, priv_key)
+    print("Final_plaintext after decryption: ", final_plaintext.decode())
+    decrypt_time_e = time.time()
+    decrypt_time = decrypt_time_e - decrypt_time_s
+    print("Decryption time: ", decrypt_time, "sec")
+
+    attack_q = input("Start Attack?")
+    if attack_q == 'n':
+        exit()
 
     #Attack
+    attack_time_s = time.time()
     plaintext=""
     token = oracle.get_token()
     for i in range(0, len(token), 16):
@@ -105,16 +75,22 @@ def test_A(plaintext):
             rsa_p = rsa_mod.decrypt(x, hacked_priv_key)
             rsa_pl = rsa_p.decode()
             #print("rsa_p", rsa_p)
+            attack_time_e = time.time()
+            break
         except(Exception):
             #print("Not a valid plain text")
             pass
-    print("RSA_P: ", rsa_pl)
 
+    print("Original Plaintext: ",orig_plaintext)
+    print("Plaintext after attack: ", rsa_pl)
+    attack_time = attack_time_e - attack_time_s
+    print("Decryption time: ",decrypt_time, "sec")
+    print("Attack time: ",attack_time, "sec")
 
-
-
-
-
+def test_2():
+    input_set = ["qwertyuiop{}asdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewq"]
+    for input in input_set:
+        test_A(input)
 
 
 
@@ -182,4 +158,4 @@ plaintext = "nishanth"
 # rsa_p = rsa_mod.decrypt(x, priv_key)
 # print("rsa_p", rsa_p)
 
-test_A(plaintext)
+test_2()
